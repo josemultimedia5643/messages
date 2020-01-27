@@ -36,7 +36,11 @@ export default function App(props) {
     firebase.auth().createUserWithEmailAndPassword(email, password);
     db.collection("users")
       .doc(firebase.auth().currentUser.uid)
-      .add({ displayName: "", photoURL: "" });
+      .add({
+        displayName: email,
+        photoURL:
+          "https://image.shutterstock.com/image-vector/figure-default-avatar-man-social-600w-731954890.jpg"
+      });
   };
 
   const handleLogin = () => {

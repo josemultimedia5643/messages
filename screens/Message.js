@@ -17,7 +17,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 export default ({ message, handleEdit }) => {
-  const [from, setFrom] = useState(null);
+  const [user, setUser] = useState(null);
 
   //   useEffect(() => {
   //     db.collection("users")
@@ -25,17 +25,17 @@ export default ({ message, handleEdit }) => {
   //       .get();
   //   }, []);
 
-  const handleSet = async () => {
-    const info = await db
+  const handleUser = async () => {
+    const user = await db
       .collection("users")
-      .doc(firebase.auth().currentUser.uid)
-      .get(snapShot => {
-        console.log("message.from info", info);
-      });
+      .doc(message.from)
+      .get();
+    console.log("message.from info", user.data());
+    setUser(user.data());
   };
 
   useEffect(() => {
-    handleSet();
+    handleUser();
   }, []);
 
   const handleDelete = message => {
@@ -45,12 +45,20 @@ export default ({ message, handleEdit }) => {
   };
 
   return (
-    <>
-      <Text>From: {message.from}</Text>
-      <Text>To: {message.to}</Text>
-      <Text>Text: {message.text}</Text>
-      <Button title="Delete" onPress={() => handleDelete(message)} />
-      <Button title="Edit" onPress={() => handleEdit(message)} />
-    </>
+    user && (
+      <View>
+        <Image
+          source={{
+            uri: user.photoURL
+          }}
+          style={{ height: 50, width: 50 }}
+        />
+        <Text>From: {message.from}</Text>
+        <Text>To: {message.to}</Text>
+        <Text>Text: {message.text}</Text>
+        <Button title="Delete" onPress={() => handleDelete(message)} />
+        <Button title="Edit" onPress={() => handleEdit(message)} />
+      </View>
+    )
   );
 };
