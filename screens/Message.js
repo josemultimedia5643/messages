@@ -25,13 +25,14 @@ export default ({ message, handleEdit }) => {
   //       .get();
   //   }, []);
 
-  const handleUser = async () => {
-    const user = await db
+  const handleUser = () => {
+    const user = db
       .collection("users")
       .doc(message.from)
-      .get();
-    console.log("message.from info", user.data());
-    setUser(user.data());
+      .onSnapshot(docSnapshot => {
+        console.log("user snapshot data", docSnapshot.data(), "\n\n");
+        setUser(docSnapshot.data());
+      });
   };
 
   useEffect(() => {
