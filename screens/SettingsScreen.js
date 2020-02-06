@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Image,
+  Dimensions
+} from "react-native";
 
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -9,6 +17,8 @@ import db from "../db";
 
 import * as ImagePicker from "expo-image-picker";
 import { setConfigurationAsync } from "expo/build/AR";
+
+import MapView, { Marker } from "react-native-maps";
 
 export default function SettingsScreen() {
   const [displayName, setDisplayName] = useState("");
@@ -115,6 +125,26 @@ export default function SettingsScreen() {
 
       <Button title="Pick Image" onPress={handlePickImage} />
       <Button title="Save" onPress={() => handleSave()} />
+      <MapView
+        style={styles.mapStyle}
+        initialRegion={{
+          // latitude: 37.78825,
+          // longitude: -122.4324,
+          latitude: 25.36079,
+          longitude: 51.480978,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: 25.36079,
+            longitude: 51.480978,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}
+        ></Marker>
+      </MapView>
     </View>
   );
 }
@@ -124,5 +154,10 @@ SettingsScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  container: {}
+  container: {},
+
+  mapStyle: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
+  }
 });
